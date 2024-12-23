@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Text to Image Plugin",
   "version": "1.0",
-  "permissions": ["contextMenus", "activeTab", "scripting"],
+  "permissions": ["contextMenus", "activeTab", "scripting", "favicon"],
   "background": {
     "service_worker": "background.js"
   },
@@ -11,6 +11,13 @@
       "js": ["webcomponents-bundle.js", "content.js"],
       "matches": ["<all_urls>"],
       "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["_favicon/*"],
+      "matches": ["<all_urls>"],
+      "extension_ids": ["*"]
     }
   ]
 }

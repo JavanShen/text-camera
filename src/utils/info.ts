@@ -11,14 +11,10 @@ export const getWebsiteInfo = () => {
         document.title
 
     const origin = window.location.origin.replace('/$', '')
-    const iconUrl =
-        document.head.querySelector('link[rel="icon"]')?.getAttribute('href') ||
-        document.head
-            .querySelector('link[rel="shortcut icon"]')
-            ?.getAttribute('href') ||
-        '/favicon.ico'
-
-    const icon = /^\//.test(iconUrl) ? origin + iconUrl : iconUrl
+    const faviconUrl = new URL(chrome.runtime.getURL('/_favicon/'))
+    faviconUrl.searchParams.set('pageUrl', origin)
+    faviconUrl.searchParams.set('size', '64')
+    const icon = faviconUrl.toString()
 
     const url = queryMetaContent('url') || window.location.href
 
