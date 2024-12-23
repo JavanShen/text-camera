@@ -13,8 +13,7 @@ const qrcodeUrl = ref<string>()
 const showText = ref<string>()
 const isShowModal = ref(false)
 
-const webSiteInfo = getWebsiteInfo()
-console.log(webSiteInfo)
+const webSiteInfo = ref(getWebsiteInfo())
 
 watch(isShowModal, val => {
     if (!val) {
@@ -24,17 +23,20 @@ watch(isShowModal, val => {
 
 const showPopup = async (selectedText: string) => {
     isShowModal.value = true
-    showText.value = selectedText
-
     await nextTick()
 
-    QRcode.toDataURL(webSiteInfo.url, async (_, url) => {
+    webSiteInfo.value = getWebsiteInfo()
+    await nextTick()
+
+    QRcode.toDataURL(webSiteInfo.value.url, async (_, url) => {
+        showText.value = selectedText
         qrcodeUrl.value = url
 
         await nextTick()
 
         if (hiddenRef.value) {
             html2canvas(hiddenRef.value, {
+                allowTaint: true,
                 onclone: (_, el) => {
                     el.style.display = 'block'
                 }
@@ -103,6 +105,7 @@ chrome.runtime.onMessage.addListener(res => {
             font-size: 14px;
             color: #000;
             width:200px;
+            line-height: 1.5;
 
             .title {
                 font-weight: 500;
