@@ -2,6 +2,10 @@
   "manifest_version": 3,
   "name": "Text to Image Plugin",
   "version": "1.0",
+  "icons": {
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
   "permissions": ["contextMenus", "activeTab", "scripting", "favicon"],
   "background": {
     "service_worker": "background.js"

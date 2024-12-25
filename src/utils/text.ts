@@ -24,7 +24,6 @@ export const cutText = (
         let left = 0,
             right = text.length - 1
         while (left < right) {
-            console.log(left, right)
             const mid = Math.floor((left + right) / 2),
                 extractedText = text.substring(0, mid + 1) + ellipsis,
                 textWidth = measureWidth(extractedText, ctx)
