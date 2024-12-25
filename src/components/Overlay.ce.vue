@@ -11,7 +11,7 @@ const isShow = defineModel<boolean>('visible')
 
 <style scoped lang="scss">
 .overlay {
-    background-color: #67676772;
+    background-color: rgba(0, 0, 0, 0.45);
     height: 100vh;
     width: 100vw;
     z-index: 999999999;
@@ -30,12 +30,11 @@ const isShow = defineModel<boolean>('visible')
 
 .overlay-enter-active,
 .overlay-leave-active {
-    transition: all 0.2s linear;
+    transition: opacity 0.2s linear;
 }
 
 .overlay-enter-from,
 .overlay-leave-to {
-    transform: scale(0.8);
     opacity: 0;
 }
 </style>

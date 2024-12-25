@@ -9,6 +9,6 @@ window.customElements.define('share-image', ShareImageElement)
 const container = document.createElement('div')
 container.setAttribute('id', 'share-image-container')
 
-document.body.insertAdjacentElement('beforeend', container)
+document.body.insertAdjacentElement('afterend', container)
 
 createApp(App).mount(container)

@@ -6,17 +6,22 @@ import QRcode from 'qrcode'
 import { getWebsiteInfo } from './utils/info'
 import { cutText } from './utils/text'
 
+const fontFamily =
+    'PingFangSC, Open Sans, Helvetica Neue, Arial, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif'
+
 const imgContainerRef = ref<HTMLElement>()
 const hiddenRef = ref<HTMLElement>()
 
 const qrcodeUrl = ref<string>()
 const showText = ref<string>()
 const isShowModal = ref(false)
+const isShowImg = ref(false)
 
 const webSiteInfo = ref(getWebsiteInfo())
 
 watch(isShowModal, val => {
     if (!val) {
+        isShowImg.value = false
         imgContainerRef.value?.replaceChildren()
     }
 })
@@ -25,7 +30,20 @@ const showPopup = async (selectedText: string) => {
     isShowModal.value = true
     await nextTick()
 
-    webSiteInfo.value = getWebsiteInfo()
+    const info = getWebsiteInfo()
+    webSiteInfo.value = {
+        ...info,
+        title: cutText(info.title, 200, 2, {
+            fontSize: '14px',
+            fontWeight: '500',
+            fontFamily
+        }),
+        description: cutText(info.description || '', 200, 2, {
+            fontSize: '12px',
+            fontWeight: '400',
+            fontFamily
+        })
+    }
     await nextTick()
 
     QRcode.toDataURL(webSiteInfo.value.url, async (_, url) => {
@@ -43,6 +61,7 @@ const showPopup = async (selectedText: string) => {
             }).then(canvas => {
                 canvas.style.boxShadow = '0px 2px 13px 4px #aaaaaa99'
                 imgContainerRef.value?.replaceChildren(canvas)
+                isShowImg.value = true
             })
         }
     })
@@ -55,17 +74,28 @@ chrome.runtime.onMessage.addListener(res => {
 
 <template>
     <Overlay v-model:visible="isShowModal">
-        <div ref="imgContainerRef"></div>
+        <Transition name="share">
+            <div v-show="isShowImg" ref="imgContainerRef"></div>
+        </Transition>
     </Overlay>
     <div class="hidden share-card" ref="hiddenRef">
         <div class="content">{{ showText }}</div>
-        <div style="display: flex; justify-content: flex-end; align-items: center; padding: 20px;">
+        <div
+            style="
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                padding: 20px;
+            "
+        >
             <img height="30" width="30" :src="webSiteInfo.icon" />
         </div>
         <div class="info">
             <div class="text">
                 <div class="title">{{ webSiteInfo.title }}</div>
-                <div class="desc">{{ cutText(webSiteInfo.description || '')  }}</div>
+                <div class="desc">
+                    {{ webSiteInfo.description }}
+                </div>
             </div>
             <img height="60" width="60" :src="qrcodeUrl" />
         </div>
@@ -73,6 +103,44 @@ chrome.runtime.onMessage.addListener(res => {
 </template>
 
 <style scoped lang="scss">
+.skeleton {
+    width: 400px;
+    height: 440px;
+    overflow: hidden;
+    background-color: #f7f7f7;
+    z-index: 0;
+    position: relative;
+
+    &::after {
+        position: absolute;
+        top: 0;
+        inset-inline-end: -150%;
+        bottom: 0;
+        inset-inline-start: -150%;
+        background: linear-gradient(
+            120deg,
+            rgba(0, 0, 0, 0.06) 25%,
+            rgba(0, 0, 0, 0.15) 37%,
+            rgba(0, 0, 0, 0.06) 63%
+        );
+        animation-name: skeleton-loading;
+        animation-duration: 1.4s;
+        animation-timing-function: ease;
+        animation-iteration-count: infinite;
+        content: '';
+    }
+}
+
+@keyframes skeleton-loading {
+    0% {
+        transform: translateX(-37.5%);
+    }
+
+    100% {
+        transform: translateX(37.5%);
+    }
+}
+
 .share-card {
     width: 400px;
     height: auto;
@@ -104,7 +172,7 @@ chrome.runtime.onMessage.addListener(res => {
             align-items: start;
             font-size: 14px;
             color: #000;
-            width:200px;
+            width: 200px;
             line-height: 1.5;
 
             .title {
@@ -113,11 +181,23 @@ chrome.runtime.onMessage.addListener(res => {
             }
 
             .desc {
+                font-weight: 400;
                 font-size: 12px;
                 color: #9e9e9e;
             }
         }
     }
+}
+
+.share-enter-active,
+.share-leave-active {
+    transition: all 0.2s linear;
+}
+
+.share-enter-from,
+.share-leave-to {
+    opacity: 0;
+    transform: scale(0.8);
 }
 
 .hidden {
