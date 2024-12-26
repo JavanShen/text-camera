@@ -149,13 +149,13 @@ chrome.runtime.onMessage.addListener(res => {
     background-color: #fff;
     position: absolute;
     z-index: 999;
+    font-family: PingFangSC, Open Sans, Helvetica Neue, Arial,
+            Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
 
     .content {
         padding: 35px 20px 20px 20px;
         font-size: 18px;
         color: #000;
-        font-family: PingFangSC, Open Sans, Helvetica Neue, Arial,
-            Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
         font-weight: 500;
     }
 
@@ -171,12 +171,13 @@ chrome.runtime.onMessage.addListener(res => {
             display: flex;
             flex-flow: column nowrap;
             align-items: start;
-            font-size: 14px;
             color: #000;
             width: 200px;
             line-height: 1.5;
-
+            word-break: break-all;
+            
             .title {
+                font-size: 14px;
                 font-weight: 500;
                 margin-bottom: 5px;
             }
