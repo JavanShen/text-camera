@@ -37,7 +37,7 @@ export const cutText = (
             }
         }
 
-        return text.substring(0, right) + ellipsis
+        return text.substring(0, right - 1) + ellipsis
     } else {
         return text
     }

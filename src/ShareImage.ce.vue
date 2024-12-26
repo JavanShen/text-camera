@@ -59,7 +59,8 @@ const showPopup = async (selectedText: string) => {
                     el.style.display = 'block'
                 }
             }).then(canvas => {
-                canvas.style.boxShadow = '0px 2px 13px 4px #aaaaaa99'
+                canvas.style.boxShadow =
+                    '0 1px 2px 0 rgba(0, 0, 0, 0.03),0 1px 6px -1px rgba(0, 0, 0, 0.02),0 2px 4px 0 rgba(0, 0, 0, 0.02)'
                 imgContainerRef.value?.replaceChildren(canvas)
                 isShowImg.value = true
             })
