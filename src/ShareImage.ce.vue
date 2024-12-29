@@ -55,6 +55,7 @@ const showPopup = async (selectedText: string) => {
         if (hiddenRef.value) {
             html2canvas(hiddenRef.value, {
                 allowTaint: true,
+                backgroundColor: null,
                 onclone: (_, el) => {
                     el.style.display = 'block'
                 }
@@ -69,7 +70,7 @@ const showPopup = async (selectedText: string) => {
 }
 
 chrome.runtime.onMessage.addListener(res => {
-    showPopup(res.text)
+    showPopup(window.getSelection()?.toString() || res.text)
 })
 </script>
 
@@ -157,6 +158,7 @@ chrome.runtime.onMessage.addListener(res => {
         font-size: 18px;
         color: #000;
         font-weight: 500;
+        white-space: pre-line;
     }
 
     .info {
