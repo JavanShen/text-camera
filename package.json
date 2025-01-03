@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build && node scripts/injectWebComponent.js",
-    "preview": "vite preview"
+    "zip": "pnpm run build && node scripts/zipDist.js"
   },
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^2.8.0",
@@ -15,10 +15,12 @@
     "vue": "^3.5.13"
   },
   "devDependencies": {
+    "@types/archiver": "^6.0.3",
     "@types/chrome": "^0.0.287",
     "@types/node": "^22.10.2",
     "@types/qrcode": "^1.5.5",
     "@vitejs/plugin-vue": "^5.2.1",
+    "archiver": "^7.0.1",
     "sass-embedded": "^1.83.0",
     "typescript": "~5.6.2",
     "vite": "^6.0.1",

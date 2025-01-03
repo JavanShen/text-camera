@@ -1,0 +1,46 @@
+name: 'Create Releases'
+
+on:
+    push:
+        tags:
+          - 'v1.*.*'
+
+jobs:
+    releases:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Use pnpm
+              uses: pnpm/action-setup@v2.4.0
+              with:
+                  version: 7
+
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '16.x'
+                  cache: 'pnpm'
+
+            - name: Cache
+              id: cache-dependencies
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      **/node_modules
+                  key: ${{runner.OS}}-${{hashFiles('pnpm-lock.yaml')}}
+
+            - name: Installing Dependencies
+              if: steps.cache-dependencies.outputs.cache-hit != 'true'
+              run: pnpm install
+
+            - name: Build
+              run: pnpm zip
+
+            - name: Create Releases
+              uses: softprops/action-gh-release@v2
+              with:
+                draft: true
+                generate_release_notes: true
+                files: text-camera-extension.zip
