@@ -1,6 +1,6 @@
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/adoclpododfhnldnloflmcgpgjigciil)](https://chromewebstore.google.com/detail/text-camera/adoclpododfhnldnloflmcgpgjigciil)
 
-[English](./README.md) | 中文
+中文 | [English](./README.md)
 
 鼠标右键选中的文本以创建分享图
 
