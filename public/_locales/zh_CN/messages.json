@@ -1,0 +1,11 @@
+{
+    "extName": {
+        "message": "文摘"
+    },
+    "desc": {
+        "message": "生成所选文本的分享图"
+    },
+    "rightClickDesc": {
+        "message": "生成分享图"
+    }
+}

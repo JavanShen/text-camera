@@ -1,0 +1,11 @@
+{
+    "extName": {
+        "message": "Text Camera"
+    },
+    "desc": {
+        "message": "Generate a share image of the text you selected"
+    },
+    "rightClickDesc": {
+        "message": "Generate Share Image"
+    }
+}

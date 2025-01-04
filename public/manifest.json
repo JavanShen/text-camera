@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Text Camera",
-  "description": "Generate a share image of the text you selected.",
+  "name": "__MSG_extName__",
+  "description": "__MSG_desc__",
   "version": "1.0",
   "icons": {
     "48": "icon48.png",
     "128": "icon128.png"
   },
+  "default_locale": "en",
   "permissions": ["contextMenus", "favicon"],
   "background": {
     "service_worker": "background.js"

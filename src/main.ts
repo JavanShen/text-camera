@@ -1,7 +1,7 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         id: 'createImage',
-        title: 'Create Image from Selected Text',
+        title: chrome.i18n.getMessage('rightClickDesc'),
         contexts: ['selection']
     })
 })
