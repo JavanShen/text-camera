@@ -1,3 +1,7 @@
+<div style="text-align: center;">
+<img width="100%" src="https://github.com/JavanShen/text-camera/blob/main/imgs/banner.png?raw=true" />
+</div>
+
 [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/adoclpododfhnldnloflmcgpgjigciil)](https://chromewebstore.google.com/detail/text-camera/adoclpododfhnldnloflmcgpgjigciil)
 
 中文 | [English](./README.md)
