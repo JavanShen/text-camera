@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, nextTick, watch } from 'vue'
-import html2canvas from 'html2canvas'
+import html2canvas from 'html2canvas-pro'
 import Overlay from './components/Overlay.ce.vue'
 import QRcode from 'qrcode'
 import { getWebsiteInfo } from './utils/info'
-import { cutText } from './utils/text'
+import { cutText, extractLink, separateParagraphs } from './utils/text'
 
 const fontFamily =
     'PingFangSC, Open Sans, Helvetica Neue, Arial, Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif'
@@ -26,7 +26,7 @@ watch(isShowModal, val => {
     }
 })
 
-const showPopup = async (selectedText: string) => {
+const showPopup = async (selectedText: string, el?: DocumentFragment) => {
     isShowModal.value = true
     await nextTick()
 
@@ -47,7 +47,10 @@ const showPopup = async (selectedText: string) => {
     await nextTick()
 
     QRcode.toDataURL(webSiteInfo.value.url, async (_, url) => {
-        showText.value = selectedText
+        const storage = await chrome.storage.local.get('options')
+        showText.value = separateParagraphs(
+            storage?.options?.isParseLink ? extractLink(el, selectedText) : selectedText
+        )
         qrcodeUrl.value = url
 
         await nextTick()
@@ -70,7 +73,8 @@ const showPopup = async (selectedText: string) => {
 }
 
 chrome.runtime.onMessage.addListener(res => {
-    showPopup(window.getSelection()?.toString() || res.text)
+    const range = window.getSelection()?.getRangeAt(0)
+    showPopup(range?.toString() || res.text, range?.cloneContents())
 })
 </script>
 
@@ -80,8 +84,8 @@ chrome.runtime.onMessage.addListener(res => {
             <div v-show="isShowImg" ref="imgContainerRef"></div>
         </Transition>
     </Overlay>
-    <div class="hidden share-card" ref="hiddenRef">
-        <div class="content">{{ showText }}</div>
+    <div class="text-camera-hidden text-camera-card" ref="hiddenRef">
+        <div class="text-camera-content">{{ showText }}</div>
         <div
             style="
                 display: flex;
@@ -92,10 +96,10 @@ chrome.runtime.onMessage.addListener(res => {
         >
             <img height="30" width="30" :src="webSiteInfo.icon" />
         </div>
-        <div class="info">
-            <div class="text">
-                <div class="title">{{ webSiteInfo.title }}</div>
-                <div class="desc">
+        <div class="text-camera-info">
+            <div class="text-camera-text">
+                <div class="text-camera-title">{{ webSiteInfo.title }}</div>
+                <div class="text-camera-desc">
                     {{ webSiteInfo.description }}
                 </div>
             </div>
@@ -105,63 +109,26 @@ chrome.runtime.onMessage.addListener(res => {
 </template>
 
 <style scoped lang="scss">
-.skeleton {
-    width: 400px;
-    height: 440px;
-    overflow: hidden;
-    background-color: #f7f7f7;
-    z-index: 0;
-    position: relative;
-
-    &::after {
-        position: absolute;
-        top: 0;
-        inset-inline-end: -150%;
-        bottom: 0;
-        inset-inline-start: -150%;
-        background: linear-gradient(
-            120deg,
-            rgba(0, 0, 0, 0.06) 25%,
-            rgba(0, 0, 0, 0.15) 37%,
-            rgba(0, 0, 0, 0.06) 63%
-        );
-        animation-name: skeleton-loading;
-        animation-duration: 1.4s;
-        animation-timing-function: ease;
-        animation-iteration-count: infinite;
-        content: '';
-    }
-}
-
-@keyframes skeleton-loading {
-    0% {
-        transform: translateX(-37.5%);
-    }
-
-    100% {
-        transform: translateX(37.5%);
-    }
-}
-
-.share-card {
+.text-camera-card {
     width: 400px;
     height: auto;
     box-sizing: border-box;
     background-color: #fff;
     position: absolute;
     z-index: 999;
-    font-family: PingFangSC, Open Sans, Helvetica Neue, Arial,
-            Hiragino Sans GB, Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
+    font-family: PingFangSC, Open Sans, Helvetica Neue, Arial, Hiragino Sans GB,
+        Microsoft YaHei, WenQuanYi Micro Hei, sans-serif;
 
-    .content {
+    .text-camera-content {
         padding: 35px 20px 20px 20px;
         font-size: 18px;
         color: #000;
         font-weight: 500;
         white-space: pre-line;
+        word-break: break-all;
     }
 
-    .info {
+    .text-camera-info {
         padding: 10px 20px;
         background-color: rgb(244, 244, 244);
         height: 100px;
@@ -169,7 +136,7 @@ chrome.runtime.onMessage.addListener(res => {
         align-items: center;
         justify-content: space-between;
 
-        .text {
+        .text-camera-text {
             display: flex;
             flex-flow: column nowrap;
             align-items: start;
@@ -177,14 +144,14 @@ chrome.runtime.onMessage.addListener(res => {
             width: 200px;
             line-height: 1.5;
             word-break: break-all;
-            
-            .title {
+
+            .text-camera-title {
                 font-size: 14px;
                 font-weight: 500;
                 margin-bottom: 5px;
             }
 
-            .desc {
+            .text-camera-desc {
                 font-weight: 400;
                 font-size: 12px;
                 color: #9e9e9e;
@@ -204,7 +171,7 @@ chrome.runtime.onMessage.addListener(res => {
     transform: scale(0.8);
 }
 
-.hidden {
+.text-camera-hidden {
     display: none;
 }
 </style>

@@ -8,9 +8,12 @@
     "128": "icon128.png"
   },
   "default_locale": "en",
-  "permissions": ["contextMenus", "favicon"],
+  "permissions": ["contextMenus", "favicon", "storage"],
   "background": {
     "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
   },
   "content_scripts": [
     {
