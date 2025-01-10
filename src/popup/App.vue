@@ -5,7 +5,7 @@
                 <ListItem class="option-item">
                     <Space>
                         <LinkOutlined />
-                        <span>解析链接</span>
+                        <span>{{ i18nText.parseLinkTitle }}</span>
                     </Space>
                     <Switch
                         :loading="isSetting"
@@ -21,6 +21,10 @@
 import { onBeforeMount, ref, watch } from 'vue'
 import { List, ListItem, Space, Spin, Switch } from 'ant-design-vue'
 import { LinkOutlined } from '@ant-design/icons-vue'
+
+const i18nText = {
+    parseLinkTitle: chrome.i18n.getMessage('parseLinkOptTitle')
+}
 
 const isSetting = ref(false)
 const isReading = ref(true)

@@ -7,5 +7,8 @@
     },
     "rightClickDesc": {
         "message": "Generate Share Image"
+    },
+    "parseLinkOptTitle": {
+        "message": "parse link"
     }
 }
