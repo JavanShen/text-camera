@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build && node scripts/injectWebComponent.js",
+    "build": "vue-tsc -b && vite build && vite build -c vite.config.popup.ts --emptyOutDir false && node scripts/injectWebComponent.js",
     "zip": "pnpm run build && node scripts/zipDist.js"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "@webcomponents/webcomponentsjs": "^2.8.0",
+    "ant-design-vue": "^4.2.6",
     "html2canvas": "^1.4.1",
+    "html2canvas-pro": "^1.5.8",
     "qrcode": "^1.5.4",
     "vue": "^3.5.13"
   },

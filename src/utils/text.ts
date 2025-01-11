@@ -42,3 +42,23 @@ export const cutText = (
         return text
     }
 }
+
+export const extractLink = (el?: DocumentFragment, content: string = '') => {
+    let res = content
+
+    el?.querySelectorAll('a').forEach(item => {
+        let link = item.getAttribute('href'), text = item.innerText
+
+        
+        if (link && text) {
+            if (/^\//.test(link || '')) {
+                link = window.location.origin + link
+            }
+            res = res.replace(text, `${text} (${decodeURIComponent(link)}) `)
+        }
+    })
+
+    return res
+}
+
+export const separateParagraphs = (text: string) => text.replace(/\n/g, '\n\n')

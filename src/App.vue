@@ -1,5 +1,5 @@
 <template>
-    <share-image></share-image>
+    <text-camera></text-camera>
 </template>
 
 <script setup lang="ts">

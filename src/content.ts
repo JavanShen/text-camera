@@ -4,10 +4,10 @@ import App from './App.vue'
 
 const ShareImageElement = defineCustomElement(ShareImage)
 
-window.customElements.define('share-image', ShareImageElement)
+window.customElements.define('text-camera', ShareImageElement)
 
 const container = document.createElement('div')
-container.setAttribute('id', 'share-image-container')
+container.setAttribute('id', 'text-camera-container')
 
 document.body.insertAdjacentElement('afterend', container)
 
